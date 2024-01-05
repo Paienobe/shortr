@@ -1,4 +1,4 @@
-package constants
+package queries
 
 const CreateTableQuery = `CREATE TABLE IF NOT EXISTS link (
 		id BIGSERIAL NOT NULL PRIMARY KEY,

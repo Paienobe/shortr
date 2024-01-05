@@ -4,12 +4,12 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/Paienobe/go-url-shortener/constants"
+	"github.com/Paienobe/go-url-shortener/queries"
 	"github.com/Paienobe/go-url-shortener/types"
 )
 
 func InsertLinkRow(db *sql.DB, link types.Link) types.Link {
-	query := constants.CreateLinkQuery
+	query := queries.CreateLinkQuery
 	var longUrl string
 	var shortKey string
 	var shortUrl string

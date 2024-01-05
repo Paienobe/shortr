@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/Paienobe/go-url-shortener/constants"
+	"github.com/Paienobe/go-url-shortener/queries"
 )
 
 func CreateTable(db *sql.DB) {
-	query := constants.CreateTableQuery
+	query := queries.CreateTableQuery
 	_, err := db.Exec(query)
 	if err != nil {
 		log.Fatal(err)

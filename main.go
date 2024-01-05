@@ -41,7 +41,17 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) { controllers.CreateLink(w, r, dbConn) }).Methods("POST")
+	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
+		controllers.CreateLink(w, r, dbConn)
+	}).Methods("POST")
+
+	router.HandleFunc("/{short_key}", func(w http.ResponseWriter, r *http.Request) {
+		controllers.VisitShort(w, r, dbConn)
+	}).Methods("GET")
+
+	router.HandleFunc("/{short_key}", func(w http.ResponseWriter, r *http.Request) {
+		controllers.DeleteLink(w, r, dbConn)
+	}).Methods("DELETE")
 
 	fmt.Printf("Server listening on PORT: %s\n", portString)
 	log.Fatal(http.ListenAndServe(portString, router))

@@ -1,4 +1,4 @@
-package constants
+package queries
 
 const CreateLinkQuery = `INSERT INTO link (long_url, short_key, short_url)
 						VALUES($1, $2, $3)

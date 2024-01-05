@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
+	"github.com/rs/cors"
 )
 
 func main() {
@@ -40,6 +41,8 @@ func main() {
 	utils.CreateTable(dbConn)
 
 	router := mux.NewRouter()
+
+	cors.AllowAll()
 
 	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
 		controllers.CreateLink(w, r, dbConn)

@@ -42,7 +42,15 @@ func main() {
 
 	router := mux.NewRouter()
 
-	cors.AllowAll()
+	handler := cors.Default().Handler(router)
+
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://*", "https://*"},
+		AllowCredentials: true,
+		Debug:            true,
+	})
+
+	handler = c.Handler(handler)
 
 	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
 		controllers.CreateLink(w, r, dbConn)

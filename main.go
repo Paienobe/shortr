@@ -67,7 +67,6 @@ func InsertLinkRow(db *sql.DB, link types.Link) types.Link {
 	var shortUrl string
 	err := db.QueryRow(query, link.LongUrl, link.ShortKey, link.ShortUrl).Scan(&longUrl, &shortKey, &shortUrl)
 	if err != nil {
-		fmt.Println("err here")
 		log.Fatal(err)
 	}
 	return types.Link{LongUrl: longUrl, ShortKey: shortKey, ShortUrl: shortUrl}
@@ -79,27 +78,32 @@ func CreateLink(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 		log.Fatal(err)
 	}
 
-	// use r.TLS to toggle http and https
-	fmt.Println(r.TLS, "tls")
+	var transferProtocol string
+
+	if r.TLS == nil {
+		transferProtocol = "http://"
+	} else {
+		transferProtocol = "https://"
+	}
 
 	var requestBody dto.CreateLinkDto
 
 	if err := json.Unmarshal(rawBody, &requestBody); err != nil {
-		log.Fatal("Error parsing data")
+		http.Error(w, "Error unmarshalling data", http.StatusBadRequest)
 	}
 
 	fmt.Println(r.Host)
 
 	longUrl := requestBody.Url
 	shortKey := utils.GenerateHash(requestBody.Url)
-	shortLink := fmt.Sprintf("%s/%s", r.Host, shortKey)
+	shortLink := fmt.Sprintf("%s%s/%s", transferProtocol, r.Host, shortKey)
 
 	generatedLink := types.Link{LongUrl: longUrl, ShortKey: shortKey, ShortUrl: shortLink}
 
 	shortr := InsertLinkRow(db, generatedLink)
 	res, err := json.Marshal(shortr)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Error marshalling data", http.StatusBadRequest)
 	}
 
 	w.Header().Set("Content-type", "application/json")

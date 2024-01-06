@@ -52,6 +52,7 @@ func main() {
 	}))
 
 	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Methods", "POST")
 		controllers.CreateLink(w, r, dbConn)
 	}).Methods("POST")
 

@@ -44,7 +44,7 @@ func main() {
 
 	router.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://shortr-ui.vercel.app", "http://localhost:5173"},
-		AllowedMethods:   []string{"GET", "POST", "DELETE"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"*"},
 		ExposedHeaders:   []string{"Link"},
 		AllowCredentials: false,

@@ -43,7 +43,7 @@ func main() {
 	router := mux.NewRouter()
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://localhost:5173"},
+		AllowedOrigins:   []string{"http://localhost:5173", "https://shortr-ui.vercel.app"},
 		AllowCredentials: true,
 	})
 

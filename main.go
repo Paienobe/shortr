@@ -9,10 +9,10 @@ import (
 
 	"github.com/Paienobe/go-url-shortener/controllers"
 	"github.com/Paienobe/go-url-shortener/utils"
+	"github.com/go-chi/cors"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"github.com/rs/cors"
 )
 
 func main() {
@@ -42,15 +42,14 @@ func main() {
 
 	router := mux.NewRouter()
 
-	handler := cors.Default().Handler(router)
-
-	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{"http://*", "https://*", "http://localhost:5173"},
-		AllowCredentials: true,
-		Debug:            true,
-	})
-
-	handler = c.Handler(handler)
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "DELETE"},
+		AllowedHeaders:   []string{"*"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300,
+	}))
 
 	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
 		controllers.CreateLink(w, r, dbConn)

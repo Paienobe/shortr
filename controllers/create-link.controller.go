@@ -14,7 +14,6 @@ import (
 )
 
 func CreateLink(w http.ResponseWriter, r *http.Request, db *sql.DB) {
-	utils.EnableCors(&w)
 	rawBody, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Fatal(err)

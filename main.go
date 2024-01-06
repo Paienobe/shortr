@@ -42,17 +42,14 @@ func main() {
 
 	router := mux.NewRouter()
 
-	router.Use(cors.Handler(cors.Options{
-		AllowedOrigins:   []string{"https://shortr-ui.vercel.app", "http://localhost:5173"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowedHeaders:   []string{"*"},
-		ExposedHeaders:   []string{"Link"},
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:5173"},
 		AllowCredentials: true,
-		MaxAge:           300,
-	}))
+	})
+
+	handler := c.Handler(router)
 
 	router.HandleFunc("/create-link", func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Access-Control-Allow-Methods", "POST")
 		controllers.CreateLink(w, r, dbConn)
 	}).Methods("POST")
 
@@ -65,6 +62,6 @@ func main() {
 	}).Methods("DELETE")
 
 	fmt.Printf("Server listening on PORT: %s\n", portString)
-	log.Fatal(http.ListenAndServe(portString, router))
+	log.Fatal(http.ListenAndServe(portString, handler))
 
 }
